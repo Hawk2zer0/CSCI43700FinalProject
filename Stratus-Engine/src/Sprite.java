@@ -47,6 +47,7 @@ public class Sprite
 	public void draw(Graphics2D graphicControl, int x, int y)
 	{
 		graphicControl.drawImage(imageFile, x, y, width, height, null);
+
 	}
 	
 	public void draw(Graphics2D graphicControl, AffineTransform original, AffineTransform rotated, int x, int y)

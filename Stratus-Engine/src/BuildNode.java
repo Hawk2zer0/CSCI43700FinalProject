@@ -24,12 +24,19 @@ public class BuildNode
 	public BuildNode(String normalImage, String completedImage, int buildTime, int buildingNum, int cost, String newName)
 	{
 		state = "Idle";
-		normal = SpriteDatabase.instance().getImageSprite(normalImage);
-		normal.setHeight(100);
-		normal.setWidth(100);
-		completed = SpriteDatabase.instance().getImageSprite(completedImage);
-		completed.setHeight(100);
-		completed.setWidth(100);
+		try
+		{
+			normal = SpriteDatabase.instance().getImageSprite(normalImage);
+			normal.setHeight(100);
+			normal.setWidth(100);
+			completed = SpriteDatabase.instance().getImageSprite(completedImage);
+			completed.setHeight(100);
+			completed.setWidth(100);
+		}
+		catch (Exception e)
+		{
+			
+		}
 		
 		active = normal;
 		

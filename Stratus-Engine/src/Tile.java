@@ -1,10 +1,13 @@
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 
 public class Tile 
 {
+	//Integers to keep track of the tiles position based on the map
 	private int x;
 	private int y;
+	
 	private Sprite base;
 	private Sprite terrain;
 	private Sprite decor;
@@ -14,6 +17,8 @@ public class Tile
 	private boolean wallEast;
 	private boolean wallSouth;
 	private boolean wallWest;
+	
+	private Rectangle self;
 	
 	public Tile(String baseId, String terrainId, String decorId, boolean north, boolean east, boolean south, boolean west, int posX, int posY)
 	{
@@ -53,28 +58,48 @@ public class Tile
 
 	}
 	
+	public int getHeight()
+	{
+		return base.getHeight();
+	}
+	
+	public int getWidth()
+	{
+		return base.getWidth();
+	}
+	
 	public void addDecor(String decorItem)
 	{
 		//add block here later
 	}
 	
-	public void update(Graphics2D g)
+	public void checkDraw(Graphics2D g, Rectangle camera)
 	{
-		//order matters!
-		if(base != null)
+		//check if our tile collides with the camera, if it does, then draw!
+		self = new Rectangle(x, y, base.getWidth(), base.getHeight());
+		
+		if(self.intersects(camera))
 		{
-			base.draw(g, x, y);
+			int offsetX = x - camera.x;
+			int offsetY = y - camera.y;			
+			
+			//order matters!
+			if(base != null)
+			{
+				base.draw(g, offsetX, offsetY);
+			}
+			
+			if(terrain != null)
+			{
+				terrain.draw(g, offsetX, offsetY);
+			}
+			
+			if(decor != null)
+			{
+				decor.draw(g, offsetX, offsetY);
+			}
 		}
 		
-		if(terrain != null)
-		{
-			terrain.draw(g,x,y);
-		}
-		
-		if(decor != null)
-		{
-			decor.draw(g, x, y);
-		}
 	}
 	
 

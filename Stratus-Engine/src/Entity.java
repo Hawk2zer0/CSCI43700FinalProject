@@ -36,9 +36,18 @@ public class Entity
 	public Entity(Game_Wrapper source, String imageFile, int width, int height)
 	{
 		origin = source;
-		sprite = SpriteDatabase.instance().getImageSprite(imageFile);
-		sprite.setHeight(height);
-		sprite.setWidth(width);
+		try
+		{
+			sprite = SpriteDatabase.instance().getImageSprite(imageFile);
+			sprite.setHeight(height);
+			sprite.setWidth(width);
+		}
+		
+		catch (Exception e)
+		{
+			
+		}
+		
 		owner = 1;
 	}
 	
