@@ -24,7 +24,7 @@ public class Camera
 	private int cWidth = 0;
 	private int cHeight = 0;
 	
-	private int scrollSpeed = 5;
+	private int scrollSpeed = 20;
 	
 	public Camera(int width, int height, int mapWidth, int mapHeight)
 	{
@@ -93,11 +93,6 @@ public class Camera
 		{
 			mapLeft = mapLeft - scrollSpeed;
 			mapRight = mapRight - scrollSpeed;
-		}
-		
-		else
-		{
-			System.out.println("Cannot Go Left Anymore");
 		}		
 	}
 	
@@ -108,11 +103,6 @@ public class Camera
 			mapLeft = mapLeft + scrollSpeed;
 			mapRight = mapRight + scrollSpeed;
 		}
-		
-		else
-		{
-			System.out.println("Cannot Go Right Anymore");
-		}
 	}
 	
 	public void upShift()
@@ -122,11 +112,6 @@ public class Camera
 			mapTop = mapTop - scrollSpeed;
 			mapBottom = mapBottom - scrollSpeed;
 		}
-		
-		else
-		{
-			System.out.println("Cannot go Up Anymore");
-		}
 	}
 	
 	public void downShift()
@@ -135,11 +120,6 @@ public class Camera
 		{
 			mapTop = mapTop + scrollSpeed;
 			mapBottom = mapBottom + scrollSpeed;
-		}
-		
-		else
-		{
-			System.out.println("Cannot go Down Anymore");
 		}
 	}
 	

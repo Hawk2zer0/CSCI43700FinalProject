@@ -47,7 +47,7 @@ public class TileWorld
 		setUpSideBarDimensions();
 		
 		//worldCam = new Camera(width,height);	
-		worldCam = new Camera(cameraWidth,600, worldWidth, worldHeight);
+		worldCam = new Camera(cameraWidth,cameraHeight, worldWidth, worldHeight);
 		sidebar = new Sidebar(cameraWidth, 0, sidebarWidth, cameraHeight);
 		
 	}

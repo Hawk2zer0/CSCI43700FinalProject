@@ -38,7 +38,8 @@ public class Tile
 			
 			if(Integer.parseInt(decorId) != -1)
 			{
-				//need decor database
+				System.out.println("Adding Decor Tile of " + decorId);
+				decor = DecorSpriteDatabase.instance().getImageSprite(decorId);
 			}
 			
 			wallNorth = north;

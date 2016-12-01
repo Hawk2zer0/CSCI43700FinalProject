@@ -1,7 +1,7 @@
 /*
- *  Sprite Database 
+ *  Tile Sprite Database 
  * 
- *  Singleton design pattern that will act as our way of storing our sprites to speed up spawning them in. Idea based on Starbound's Item, Planet, Enemy Databases
+ *  Singleton design pattern that will act as our way of storing our Tile sprites to speed up spawning them in. Idea based on Starbound's Item, Planet, Enemy Databases
  * 
  */
 
@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 
-public class TileSpriteDatabase extends SpriteDatabase
+public class TileSpriteDatabase
 {
 	private static TileSpriteDatabase instance;
 	
@@ -25,8 +25,6 @@ public class TileSpriteDatabase extends SpriteDatabase
 	//private constructor because it's not suppose to have more than one instance.
 	private TileSpriteDatabase()
 	{
-		
-		super();
 		long startTime = System.currentTimeMillis();		
 		loadImageSprite("1", "images/beach_bl_grass.png");
 		loadImageSprite("2", "images/beach_bl.png");
@@ -153,7 +151,6 @@ public class TileSpriteDatabase extends SpriteDatabase
 		
 	}
 	
-	@Override
 	public Sprite getImageSprite(String desiredKey) throws Exception
 	{
 		if(tileMap.get(desiredKey) != null)
