@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 
-public class TileSpriteDatabase 
+public class TileSpriteDatabase extends SpriteDatabase
 {
 	private static TileSpriteDatabase instance;
 	
@@ -25,6 +25,8 @@ public class TileSpriteDatabase
 	//private constructor because it's not suppose to have more than one instance.
 	private TileSpriteDatabase()
 	{
+		
+		super();
 		long startTime = System.currentTimeMillis();		
 		loadImageSprite("1", "images/beach_bl_grass.png");
 		loadImageSprite("2", "images/beach_bl.png");
@@ -139,7 +141,7 @@ public class TileSpriteDatabase
 			imageOut.getGraphics().drawImage(imageSource, 0, 0, null);
 			
 			//load the image by creating the sprite
-			Sprite newSprite = new Sprite(64, 64, imageOut);
+			Sprite newSprite = new Sprite(40, 40, imageOut);
 			
 			tileMap.put(key, newSprite);
 		}
@@ -151,6 +153,7 @@ public class TileSpriteDatabase
 		
 	}
 	
+	@Override
 	public Sprite getImageSprite(String desiredKey) throws Exception
 	{
 		if(tileMap.get(desiredKey) != null)

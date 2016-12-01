@@ -24,9 +24,9 @@ public class SpriteDatabase
 	private HashMap<String, Sprite> spriteMap = new HashMap<String, Sprite>();
 	
 	//private constructor because it's not suppose to have more than one instance.
-	private SpriteDatabase()
+	protected SpriteDatabase()
 	{
-		loadImageSprite("test.png");
+		
 	}
 	
 	public static SpriteDatabase instance()
@@ -43,7 +43,7 @@ public class SpriteDatabase
 		}
 	}
 	
-	public  void loadImageSprite(String path)
+	public  void loadImageSprite(String path, int width, int height)
 	{
 		//"Check-in" all the images
 		URL imagePath = this.getClass().getClassLoader().getResource(path);
@@ -62,7 +62,7 @@ public class SpriteDatabase
 			imageOut.getGraphics().drawImage(imageSource, 0, 0, null);
 			
 			//load the image by creating the sprite
-			Sprite newSprite = new Sprite(5, 5, imageOut);
+			Sprite newSprite = new Sprite(width, height, imageOut);
 			
 			spriteMap.put(path, newSprite);
 		}
@@ -74,7 +74,7 @@ public class SpriteDatabase
 		
 	}
 	
-	public Sprite getImageSprite(String filePath)
+	public Sprite getImageSprite(String filePath) throws Exception
 	{
 		if(spriteMap.get(filePath) != null)
 		{
@@ -83,9 +83,7 @@ public class SpriteDatabase
 		
 		else
 		{
-			loadImageSprite(filePath);
-			
-			return (Sprite)spriteMap.get(filePath);
+			throw new Exception("Bad Key Provided!Key: " + filePath);
 		}
 		
 	}
