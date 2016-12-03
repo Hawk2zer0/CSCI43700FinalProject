@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -52,77 +53,119 @@ public class TileWorld
 		
 	}
 	
-	//Loads map from a txt file and builds as it goes
+	//Loads map from a txt file and builds as it goes only overriding default tiles if that coordinate is mentioned in the file
 	public void loadMapFromFile()
 	{
 		try
 		{
-			BufferedReader fromFile = new BufferedReader(new FileReader(mapPath));
+			File file = new File(mapPath);
+			
+			BufferedReader fromFile = new BufferedReader(new FileReader(file));
 			
 			String curLine;
 			
-			int activeRow = -1;
+			//bookkeeping Integers
+			int maxRows;
+			int maxCols;
+			int currentRow = 0;
+			int currentCol = 0;
 			
-			int col = 0;
-			
+			//holds are row of tiles
 			ArrayList<Tile> tempArray = new ArrayList<Tile>();
 			
+			curLine = fromFile.readLine();
+			
+			String[] sizes = curLine.split(",");
+			
+			maxRows = Integer.parseInt(sizes[1]);
+			maxCols = Integer.parseInt(sizes[0]);
+			
 			while((curLine = fromFile.readLine()) != null)
-			{				
+			{
+				System.out.println("Current at Row: " + currentRow + " |Max Rows: " + maxRows);
+				System.out.println("Current at Col: " + currentCol + " |Max Cols: " + maxCols);
+				
 				String[] parsedLine = curLine.split(",");
 				
-				//behavior needed when the first value is the CSV-like file is different
-				if(activeRow != Integer.parseInt(parsedLine[0]))
+				//check what row we are on
+				if(currentRow != Integer.parseInt(parsedLine[0]))
 				{
-					if(activeRow != -1)
+					//need to catch up with the map
+					while(currentRow != Integer.parseInt(parsedLine[0]))
 					{
+						for(int col = currentCol; col < maxCols; col++)
+						{
+							Tile temp = new Tile("75","-1","-1", (col * 40), (currentRow * 40));
+							
+							tempArray.add(temp);
+						}
+						
+						currentRow++;
+						currentCol = 0;
 						tileSet.add(tempArray);
-						
-						col = 0;
+						tempArray = new ArrayList<Tile>();
 					}
-						
-					//overwrites the existing array
-					tempArray = new ArrayList<Tile>();
+				}
+				
+				if(currentCol != Integer.parseInt(parsedLine[1]))
+				{
+					System.out.println("Column number is different, have " + currentCol + " next request is " + parsedLine[1]);
 					
-					activeRow = Integer.parseInt(parsedLine[0]);
-				}
-				
-				boolean north = false;
-				boolean east = false;
-				boolean south = false;
-				boolean west = false;
-				
-				if(parsedLine[4] == "1")
-				{
-					north = true;
-				}
-				
-				if(parsedLine[5] == "1")
-				{
-					east = true;
-				}
-				
-				if(parsedLine[6] == "1")
-				{
-					south = true;
-				}
-				
-				if(parsedLine[7] == "1")
-				{
-					west = true;
-				}
+					//we need to only catch up on our columns
+					for(int col = currentCol; col < Integer.parseInt(parsedLine[1]); col++)
+					{
+						Tile temp = new Tile("75","-1","-1", (col * 40), (currentRow * 40));
 						
-				Tile temp = new Tile(parsedLine[1],parsedLine[2],parsedLine[3], north, east, south, west, (col * 40), (activeRow * 40));
+						tempArray.add(temp);
+						
+						currentCol++;
+					}
+				}
+				
+				//we are on the same track at this point, so override this tile.
+				Tile temp = new Tile(parsedLine[2],parsedLine[3],parsedLine[4], (currentCol * 40), (currentRow * 40));
 				
 				tempArray.add(temp);
 				
-				col++;
-				
+				currentCol++;
 			}
 			
-			//add last row
+			//make sure the remaining columns are filled!			
+			if(currentCol < maxCols)
+			{
+				for(int col = currentCol; col < maxCols; col++)
+				{
+					Tile temp = new Tile("75","-1","-1", (col * 40), (currentRow * 40));
+					
+					tempArray.add(temp);
+				}
+			}
 			
+			//add current row			
 			tileSet.add(tempArray);
+			currentRow++;
+			
+			//check if all rows have been added
+			if(currentRow < maxRows)
+			{
+				tempArray = new ArrayList<Tile>();
+				
+				//need to catch up with the map
+				while(currentRow < maxRows)
+				{					
+					for(int col = 0; col < maxCols; col++)
+					{
+						Tile temp = new Tile("75","-1","-1", (col* 40), (currentRow * 40));
+						
+						tempArray.add(temp);
+					}
+					
+					currentRow++;
+					tileSet.add(tempArray);
+				}
+			}
+			
+			fromFile.close();
 		}
 		
 		catch(IOException ioE)
@@ -226,6 +269,14 @@ public class TileWorld
 				col.checkDraw(g, worldCam.getCamera());
 			}
 		}
+	}
+	
+	public void compareClick(MouseEvent mouse)
+	{
+		System.out.println("Relative Mouse Position: " + mouse.getX() + " " +  mouse.getY());
+		int absX = mouse.getX() + worldCam.getLeft();
+		int absY = mouse.getY() + worldCam.getTop();
+		System.out.println("Absolute Mouse Position: " + absX + " " +  absY);		
 	}
 	
 	public void update(Graphics2D g, Point tracker)

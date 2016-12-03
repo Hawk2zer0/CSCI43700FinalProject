@@ -26,38 +26,38 @@ public class DecorSpriteDatabase
 	private DecorSpriteDatabase()
 	{
 		long startTime = System.currentTimeMillis();		
-		loadImageSprite("1", "images/decor/barrels_1.png");
-		loadImageSprite("2", "images/decor/barrels_2.png");
-		loadImageSprite("3", "images/decor/bush_1.png");
-		loadImageSprite("4", "images/decor/bush_big.png");
-		loadImageSprite("5", "images/decor/crates_1.png");
-		loadImageSprite("6", "images/decor/crates_2.png");
-		loadImageSprite("7", "images/decor/crates_3.png");
-		loadImageSprite("8", "images/decor/crates_4.png");
-		loadImageSprite("9","images/decor/dirt_001.png");
-		loadImageSprite("10","images/decor/dirt_002.png");
-		loadImageSprite("11","images/decor/dirt_grass_hor_01.png");
-		loadImageSprite("12","images/decor/dirt_grass_hor_02.png");
-		loadImageSprite("13","images/decor/dirt_grass_vert.png");
-		loadImageSprite("14","images/decor/grass_01.png");
-		loadImageSprite("15","images/decor/grass_02.png");
-		loadImageSprite("16","images/decor/road_1.png");
-		loadImageSprite("17","images/decor/road_2.png");
-		loadImageSprite("18","images/decor/road_3.png");
-		loadImageSprite("19","images/decor/road_4.png");
-		loadImageSprite("20","images/decor/road_5.png");
-		loadImageSprite("21","images/decor/road_asphalt_clean_hor.png");
-		loadImageSprite("22","images/decor/road_asphalt_clean_to_damaged_hor.png");
-		loadImageSprite("23","images/decor/road_asphalt_clean_to_damaged_vert.png");
-		loadImageSprite("24","images/decor/road_asphalt_clean_vert.png");
-		loadImageSprite("25","images/decor/road_asphalt_damaged_hor.png");
-		loadImageSprite("26","images/decor/road_asphalt_damaged_to_clean_hor.png");
-		loadImageSprite("27","images/decor/road_asphalt_damaged_to_clean_vert.png");
-		loadImageSprite("28","images/decor/road_asphalt_damaged_vert.png");
-		loadImageSprite("29","images/decor/road_corner_1.png");
-		loadImageSprite("30","images/decor/road_corner_2.png");
-		loadImageSprite("31","images/decor/road_corner_3.png");
-		loadImageSprite("32","images/decor/road_corner_4.png");
+		loadImageSprite("1","images/decor/dirt_001.png");
+		loadImageSprite("2","images/decor/dirt_002.png");
+		loadImageSprite("3","images/decor/dirt_grass_hor_01.png");
+		loadImageSprite("4","images/decor/dirt_grass_hor_02.png");
+		loadImageSprite("5","images/decor/dirt_grass_vert.png");
+		loadImageSprite("6","images/decor/grass_01.png");
+		loadImageSprite("7","images/decor/grass_02.png");
+		loadImageSprite("8","images/decor/road_1.png");
+		loadImageSprite("9","images/decor/road_2.png");
+		loadImageSprite("10","images/decor/road_3.png");
+		loadImageSprite("11","images/decor/road_4.png");
+		loadImageSprite("12","images/decor/road_5.png");
+		loadImageSprite("13","images/decor/road_asphalt_clean_hor.png");
+		loadImageSprite("14","images/decor/road_asphalt_clean_to_damaged_hor.png");
+		loadImageSprite("15","images/decor/road_asphalt_clean_to_damaged_vert.png");
+		loadImageSprite("16","images/decor/road_asphalt_clean_vert.png");
+		loadImageSprite("17","images/decor/road_asphalt_damaged_hor.png");
+		loadImageSprite("18","images/decor/road_asphalt_damaged_to_clean_hor.png");
+		loadImageSprite("19","images/decor/road_asphalt_damaged_to_clean_vert.png");
+		loadImageSprite("20","images/decor/road_asphalt_damaged_vert.png");
+		loadImageSprite("21","images/decor/road_corner_1.png");
+		loadImageSprite("22","images/decor/road_corner_2.png");
+		loadImageSprite("23","images/decor/road_corner_3.png");
+		loadImageSprite("24","images/decor/road_corner_4.png");
+		loadImageSprite("25", "images/decor/barrels_1.png");
+		loadImageSprite("26", "images/decor/barrels_2.png");
+		loadImageSprite("27", "images/decor/bush_1.png");
+		loadImageSprite("28", "images/decor/bush_big.png");
+		loadImageSprite("29", "images/decor/crates_1.png");
+		loadImageSprite("30", "images/decor/crates_2.png");
+		loadImageSprite("31", "images/decor/crates_3.png");
+		loadImageSprite("32", "images/decor/crates_4.png");
 		loadImageSprite("33","images/decor/rock_010.png");
 		loadImageSprite("34","images/decor/rock_1.png");
 		loadImageSprite("35","images/decor/rock_2.png");
@@ -69,7 +69,7 @@ public class DecorSpriteDatabase
 		loadImageSprite("41","images/decor/rock_8.png");
 		loadImageSprite("42","images/decor/rock_9.png");
 		
-		System.out.print("Tile Database loaded in " + (long)((System.currentTimeMillis() - startTime)/1000) + " seconds...");
+		System.out.println("Decor Database loaded in " + (long)((System.currentTimeMillis() - startTime)/1000) + " seconds...");
 	}
 	
 	public static DecorSpriteDatabase instance()

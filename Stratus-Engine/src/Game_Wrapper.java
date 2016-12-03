@@ -28,7 +28,7 @@ public class Game_Wrapper extends JFrame
 
     public static void main(String[] args) 
     {
-        new Game_Wrapper();
+    	new Game_Wrapper();
     }
 
     //set up our game window
@@ -51,9 +51,10 @@ public class Game_Wrapper extends JFrame
         
         this.setResizable(false);
         this.pack();
+        this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
+        
         
         canvas.init();
         canvas.mainloop();

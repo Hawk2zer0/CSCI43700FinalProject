@@ -13,39 +13,36 @@ public class Tile
 	private Sprite decor;
 	
 	//pathfinding variables
-	private boolean wallNorth;
-	private boolean wallEast;
-	private boolean wallSouth;
-	private boolean wallWest;
+	private boolean wall = false;
 	
 	private Rectangle self;
 	
-	public Tile(String baseId, String terrainId, String decorId, boolean north, boolean east, boolean south, boolean west, int posX, int posY)
+	public Tile(String baseId, String terrainId, String decorId, int posX, int posY)
 	{
 		try
 		{
 			if(Integer.parseInt(baseId) != -1)
 			{
-				System.out.println("Adding Base Tile of " + baseId);
 				base = TileSpriteDatabase.instance().getImageSprite(baseId);
 			}
 			
 			if(Integer.parseInt(terrainId) != -1)
 			{			
-				System.out.println("Adding Terrain Tile of " + terrainId);
+				//System.out.println("Impassible Tile placed at:  (" + posX + "," + posY + ")");
 				terrain = TileSpriteDatabase.instance().getImageSprite(terrainId);
+				wall = true;
 			}
 			
 			if(Integer.parseInt(decorId) != -1)
 			{
-				System.out.println("Adding Decor Tile of " + decorId);
+				//System.out.println("Adding Decor Tile of " + decorId);
 				decor = DecorSpriteDatabase.instance().getImageSprite(decorId);
-			}
-			
-			wallNorth = north;
-			wallEast = east;
-			wallSouth = south;
-			wallWest = west;
+				
+				if(Integer.parseInt(decorId) >= 25)
+				{
+					wall = true;
+				}
+			}			
 			
 			x = posX;
 			y = posY;

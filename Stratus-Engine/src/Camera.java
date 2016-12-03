@@ -24,7 +24,7 @@ public class Camera
 	private int cWidth = 0;
 	private int cHeight = 0;
 	
-	private int scrollSpeed = 20;
+	private int scrollSpeed = 10;
 	
 	public Camera(int width, int height, int mapWidth, int mapHeight)
 	{

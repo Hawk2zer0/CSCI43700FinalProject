@@ -102,8 +102,10 @@ public class TileSpriteDatabase
 		loadImageSprite("74","images/beach2_tr.png");
 		loadImageSprite("75","images/grass.png");
 		loadImageSprite("76","images/sand.png");
+		loadImageSprite("77","images/beach_l_down_diagonal_neighbour_grass.png");
+		loadImageSprite("78","images/beach_l_down_diagonal_neighbour.png");
 		
-		System.out.print("Tile Database loaded in " + (long)((System.currentTimeMillis() - startTime)/1000) + " seconds...");
+		System.out.println("Tile Database loaded in " + (long)((System.currentTimeMillis() - startTime)/1000) + " seconds...");
 	}
 	
 	public static TileSpriteDatabase instance()

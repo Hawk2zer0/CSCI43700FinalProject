@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class GameCanvas extends Canvas
 	private Set<Integer> keysPressed = new HashSet<Integer>();
 	
 	//World Map Files
-	private String world1Map = "resources/world1Map.txt";
+	private String world1Map = "resources/mapData/world1Map.txt";
 	
 	//Frame Rate Variables/Constants
 	private long currentTime;
@@ -48,15 +49,13 @@ public class GameCanvas extends Canvas
 	
 	public GameCanvas(int gameWidth, int gameHeight)
 	{
-		setBackground(Color.red);
+		setBackground(Color.blue);
 		width = gameWidth;
 		height = gameHeight;
 	}
 	
 	public void init()
-    {    	
-    	
-    	//world = new World(this, "concreteMap.jpg", "sideBar.png");
+    {
     	
     	world = new TileWorld(this, world1Map);
     	
@@ -66,7 +65,7 @@ public class GameCanvas extends Canvas
         	{
         		if(SwingUtilities.isLeftMouseButton(me))
         		{
-        			System.out.println(me.getX() + " " +  me.getY());
+        			world.compareClick(me);
         		}
         		
         		else if(SwingUtilities.isRightMouseButton(me))
@@ -139,16 +138,6 @@ public class GameCanvas extends Canvas
 				
 				lastTime = currentTime;   
     		} 
-    		
-    		try
-    		{
-    			Thread.sleep(10);
-    		}
-    		
-    		catch(Exception e)
-    		{
-    			System.out.println("I can't sleep, you're too loud!");
-    		}
     		
 
     	}
