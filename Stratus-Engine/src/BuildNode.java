@@ -13,7 +13,7 @@ public class BuildNode
 	private long startBuildTime = 0;
 	private int buildTime;
 	private int buildingNum;
-	private int cost = 0;
+	private int buildingCost = 0;
 	private String name = "";
 	
 	//timer variable
@@ -27,7 +27,7 @@ public class BuildNode
 	
 	Team player;
 	
-	public BuildNode(Team curPlayer, String normalImage, String completedImage, int buildTime, int buildingNum, int cost, String newName)
+	public BuildNode(Team curPlayer, String normalImage, String completedImage, int time, int id, int cost, String newName)
 	{
 		state = "Idle";
 		try
@@ -45,6 +45,10 @@ public class BuildNode
 		}
 		
 		active = normal;
+		buildingCost = cost;
+		buildTime = time;
+		buildingNum = id;
+			
 		
 		name = newName;
 		

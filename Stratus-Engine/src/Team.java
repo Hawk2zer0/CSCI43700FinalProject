@@ -112,17 +112,17 @@ public class Team
 	{
 		if(id == 1)
 		{
-			activeBuilding  = new Building(origin, "powerplant.png", 80, 80,10);
+			activeBuilding  = new Building(origin, "powerplant.png", 80, 80,20);
 		}
 		
 		else if(id == 2)
 		{
-			activeBuilding  = new Building(origin, "barracks.png", 80, 80,20);
+			activeBuilding  = new Building(origin, "barracks.png", 80, 80,30);
 		}
 		
 		else if(id == 3)
 		{
-			activeBuilding  = new Building(origin, "warFactory.png", 80, 80, 20);
+			activeBuilding  = new Building(origin, "warFactory.png", 80, 80, 40);
 		}
 		
 		if(activeBuilding != null)
@@ -141,6 +141,9 @@ public class Team
 	public void placeStructure(int x, int y)
 	{
 		activeBuilding.changePosition(x, y);
+		activeBuilding.setOwner(1);
+		activeBuilding.setHealth(200);
+		activeBuilding.updateTiles();
 		buildings.add(activeBuilding);
 		activeBuilding = null;
 	}
@@ -148,6 +151,14 @@ public class Team
 	//debug method for now
 	public void addUnits()
 	{		
+		Unit test = new Unit(origin,"truck3_body.png", 40, 40, 1);
+		
+		test.setSpeed(1);
+		
+		test.changePosition(40, 880);
+		
+		units.add(test);
+		
 		Unit test2 = new Unit(origin,"truck3_body.png", 40, 40, 1);
 		
 		test2.setSpeed(1);
@@ -233,9 +244,5 @@ public class Team
 			activeUnits.clear();
 		}
 	}
-	
-	
-	
-	
 	
 }
