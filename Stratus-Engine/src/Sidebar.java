@@ -29,4 +29,14 @@ public class Sidebar
 	{
 		imageBase.draw(g, imageX, imageY);
 	}
+	
+	public int getSidebarX()
+	{
+		return imageX;
+	}
+	
+	public int getSidebarY()
+	{
+		return imageY;
+	}
 }

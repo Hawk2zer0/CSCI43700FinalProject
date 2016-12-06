@@ -30,6 +30,7 @@ public class GameCanvas extends Canvas
 	
 	//Set for tracking keysPressed
 	private Set<Integer> keysPressed = new HashSet<Integer>();
+	private boolean shiftFlag = false;
 	
 	//World Map Files
 	private String world1Map = "resources/mapData/world1Map.txt";
@@ -65,12 +66,20 @@ public class GameCanvas extends Canvas
         	{
         		if(SwingUtilities.isLeftMouseButton(me))
         		{
-        			world.compareClick(me);
+        			if(shiftFlag)
+        			{
+        				world.compareClick(me, true);
+        			}
+        			
+        			else
+        			{
+        				world.compareClick(me,  false);
+        			}
         		}
         		
         		else if(SwingUtilities.isRightMouseButton(me))
         		{
-        			System.out.println("RIGHT CLICK!");
+        			world.handleRightClick();
         		}
         		
         	}
@@ -90,12 +99,41 @@ public class GameCanvas extends Canvas
         			System.exit(0);
         		}
         		
+        		if(keysPressed.contains(e.VK_LEFT))
+        		{
+        			world.adjustCamera("left", canvasGraphics);
+        		}
+        		
+        		if(keysPressed.contains(e.VK_RIGHT))
+        		{
+        			world.adjustCamera("right", canvasGraphics);
+        		}
+        		
+        		if(keysPressed.contains(e.VK_DOWN))
+        		{
+        			world.adjustCamera("down", canvasGraphics);
+        		}
+        		
+        		if(keysPressed.contains(e.VK_UP))
+        		{
+        			world.adjustCamera("up", canvasGraphics);
+        		}
+        		
+        		if(keysPressed.contains(e.VK_SHIFT))
+        		{
+        			shiftFlag = true;
+        		}
+        		
         	}
 
     		public void keyReleased(KeyEvent e) 
     		{
     			keysPressed.remove(e.getKeyCode());
     			System.out.println("Total Keys: " + keysPressed.size());
+        		if(!keysPressed.contains(e.VK_SHIFT))
+        		{
+        			shiftFlag = false;
+        		}
     		}
 
     		public void keyTyped(KeyEvent e) 
@@ -108,7 +146,7 @@ public class GameCanvas extends Canvas
 	
 	public void mainloop()
     {        
-        createBufferStrategy(2);
+        createBufferStrategy(4);
     	
     	while(running)
     	{

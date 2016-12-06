@@ -26,7 +26,7 @@ public class SpriteDatabase
 	//private constructor because it's not suppose to have more than one instance.
 	protected SpriteDatabase()
 	{
-		
+		loadImageSprite("test.png", 40,40);
 	}
 	
 	public static SpriteDatabase instance()
@@ -69,7 +69,7 @@ public class SpriteDatabase
 		
 		catch (Exception e)
 		{
-			System.out.print("Something when wrong with SpriteDatabase in loadImageSprite()");
+			System.out.println("Something when wrong with SpriteDatabase in loadImageSprite()");
 		}
 		
 	}

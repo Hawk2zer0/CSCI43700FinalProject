@@ -6,12 +6,13 @@
  */
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Team
 {
 	//members
-	private Game_Wrapper origin;
+	private TileWorld origin;
 	private int id;
 	private int powerGenerated = 0;
 	private int powerDrained = 0;
@@ -22,19 +23,15 @@ public class Team
 	private boolean placeBuilding = false;
 	
 	//arrays containing entities. 
-	private ArrayList<Entity> units = new ArrayList<Entity>();
+	private ArrayList<Unit> units = new ArrayList<Unit>();
 	private ArrayList<Building> buildings = new ArrayList<Building>();
 	
 	//array for units selected	
-	private ArrayList<Entity> active = new ArrayList<Entity>();
+	private ArrayList<Unit> activeUnits = new ArrayList<Unit>();
 	
-	//Factory Test ----REMOVE LATER
-	private Unit_Factory factory;
-	
-	public Team(Game_Wrapper source, int teamId, int moneyAmount)
+	public Team(TileWorld source, int teamId, int moneyAmount)
 	{
 		origin = source;
-		factory = new Unit_Factory(source);
 		id = teamId;
 		money = moneyAmount;
 		
@@ -64,7 +61,7 @@ public class Team
 		
 		conYard.changePosition(x, y);
 		
-		conYard.setOwner(id);
+		//conYard.setOwner(id);
 		
 		conYard.setHealth(500);
 		
@@ -76,54 +73,49 @@ public class Team
 	//debug method for now
 	public void addUnits()
 	{
-    	Entity ship = factory.makeUnit("test2.png", 50, 50);
-    	
-    	Entity ship2 = factory.makeUnit("test.png", 50, 50);
-    	
-    	ship.changeSpeed(5);
-    	ship.setAngles(45);
+		Unit test = new Unit(origin,"test.png", 40, 40, 1);
 		
-    	ship2.changeSpeed(5);    	
-    	ship2.changePosition(300, 200);
-    	ship2.setAngles(0);
-    	
-    	units.add(ship);
-    	
-    	units.add(ship2);
+		test.setSpeed(1);
+		
+		test.changePosition(120, 880);
+		
+		units.add(test);
+		
+		Unit test2 = new Unit(origin,"test.png", 40, 40, 1);
+		
+		test2.setSpeed(1);
+		
+		test2.changePosition(80, 880);
+		
+		units.add(test2);
 	}
 	
-	public void update(Graphics2D graphics)
+	public void update(Graphics2D graphics, Rectangle camera)
 	{
 		for(Entity unit : units)
 		{
-			unit.update(graphics);
+			unit.update(graphics, camera);
 		}
-		
-		if(units.size() == 2)
-		{
-			if(units.get(0).checkCollision(units.get(1)))
-			{
-				System.out.println("Collision detected!");
-				units.get(0).die();
-				units.get(1).die();
-				units.remove(1);
-				units.remove(0);
-			}
-		}
-		
-		for(Building building : buildings)
-		{
-			building.update(graphics);
-		}		
+	
 	}
 	
 	public void checkMouseHover(int mouseX, int mouseY)
 	{
-		for(Entity unit : units)
+		
+		for(Unit unit : units)
 		{
 			if(unit.isMouseOver(mouseX, mouseY))
 			{
 				System.out.println("Health: " + unit.getHealth());
+				if(activeUnits.contains(unit))
+				{
+					activeUnits.remove(unit);
+				}
+				
+				else
+				{
+					addToSelected(unit);
+				}
 			}
 		}
 		
@@ -133,6 +125,40 @@ public class Team
 			{
 				System.out.println("Health: " + building.getHealth());
 			}
+		}
+	}
+	
+	public void moveEntityTo(int mouseX, int mouseY)
+	{
+		for(Unit unit : activeUnits)
+		{
+			int offsetX = mouseX;
+			int offsetY = mouseY;
+			
+			unit.moveTo(offsetX, offsetY);
+		}
+	}
+	
+	//does the team have active units?
+	public boolean hasActive()
+	{
+		return (activeUnits.size() > 0);
+	}
+	
+	//adds to selected group
+	public void addToSelected(Unit selectedUnit)
+	{
+		activeUnits.add(selectedUnit);
+		System.out.println("Unit added to Selection Array");
+	}
+	
+	//removes all entities in selection
+	public void removeSelected()
+	{
+		if(hasActive())
+		{
+			System.out.println(activeUnits.size() + " Items removed from Active Array");
+			activeUnits.clear();
 		}
 	}
 	

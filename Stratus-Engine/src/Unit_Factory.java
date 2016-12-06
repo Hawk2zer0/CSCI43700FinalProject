@@ -7,9 +7,9 @@
 public class Unit_Factory 
 {
 	//members
-	private Game_Wrapper origin;
+	private TileWorld origin;
 	
-	public Unit_Factory(Game_Wrapper source)
+	public Unit_Factory(TileWorld source)
 	{
 		origin = source;
 	}

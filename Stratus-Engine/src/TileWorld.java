@@ -17,7 +17,9 @@ public class TileWorld
 	//Aggregate Classes
 	private Camera worldCam;
 	private Sidebar sidebar;
+	private Team player;
 	
+	//Map Related variables
 	private ArrayList<ArrayList<Tile>> tileSet;
 	private String mapPath;
 	
@@ -36,6 +38,9 @@ public class TileWorld
 	//Sidebar width
 	private int sidebarWidth = 400;
 	
+	//boolean to allow mouse movement to take precedence over keys
+	boolean mouseOnZone = false;
+	
 	public TileWorld(GameCanvas source, String mapFile)
 	{
 		tileSet = new ArrayList<ArrayList<Tile>>();
@@ -47,9 +52,10 @@ public class TileWorld
 		determineMapSize();
 		setUpSideBarDimensions();
 		
-		//worldCam = new Camera(width,height);	
 		worldCam = new Camera(cameraWidth,cameraHeight, worldWidth, worldHeight);
 		sidebar = new Sidebar(cameraWidth, 0, sidebarWidth, cameraHeight);
+		
+		player = new Team(this,1,0);
 		
 	}
 	
@@ -82,9 +88,6 @@ public class TileWorld
 			
 			while((curLine = fromFile.readLine()) != null)
 			{
-				System.out.println("Current at Row: " + currentRow + " |Max Rows: " + maxRows);
-				System.out.println("Current at Col: " + currentCol + " |Max Cols: " + maxCols);
-				
 				String[] parsedLine = curLine.split(",");
 				
 				//check what row we are on
@@ -108,9 +111,7 @@ public class TileWorld
 				}
 				
 				if(currentCol != Integer.parseInt(parsedLine[1]))
-				{
-					System.out.println("Column number is different, have " + currentCol + " next request is " + parsedLine[1]);
-					
+				{					
 					//we need to only catch up on our columns
 					for(int col = currentCol; col < Integer.parseInt(parsedLine[1]); col++)
 					{
@@ -184,18 +185,21 @@ public class TileWorld
 			{
 				if(mouseLoc.getX() >= 0 && mouseLoc.getX() < 0 + cam_XOffset)
 				{
+					mouseOnZone = true;
 					worldCam.leftShift();
 					worldCam.upShift();
 				}
 				
 				else if(mouseLoc.getX() < cameraWidth && mouseLoc.getX() > cameraWidth - cam_XOffset)
 				{
+					mouseOnZone = true;
 					worldCam.rightShift();
 					worldCam.upShift();
 				}
 				
 				else
 				{
+					mouseOnZone = true;
 					worldCam.upShift();
 				}
 			}
@@ -204,35 +208,42 @@ public class TileWorld
 			{
 				if(mouseLoc.getX() >= 0 && mouseLoc.getX() < 0 + cam_XOffset)
 				{
+					mouseOnZone = true;
 					worldCam.leftShift();
 					worldCam.downShift();
 				}
 				
 				else if(mouseLoc.getX() < cameraWidth && mouseLoc.getX() > cameraWidth - cam_XOffset)
 				{
+					mouseOnZone = true;
 					worldCam.rightShift();
 					worldCam.downShift();
 				}
 				
 				else
 				{
+					mouseOnZone = true;
 					worldCam.downShift();
 				}
 			}
 			
 			else if(mouseLoc.getX() >= 0 && mouseLoc.getX() < 0 + cam_XOffset)
 			{
+				mouseOnZone = true;
 				worldCam.leftShift();
 			}
 			
 			else if(mouseLoc.getX() < cameraWidth && mouseLoc.getX() > cameraWidth - cam_XOffset)
 			{
+				mouseOnZone = true;
 				worldCam.rightShift();
 			}
 			else
 			{
-				//System.out.println("Mouse not in Hover Zones");
+				mouseOnZone = false;
 			}
+			
+			//call draw to make sure we are good
 		}
 	}
 	
@@ -271,20 +282,100 @@ public class TileWorld
 		}
 	}
 	
-	public void compareClick(MouseEvent mouse)
+	public void compareClick(MouseEvent mouse, boolean shiftPressed)
 	{
-		System.out.println("Relative Mouse Position: " + mouse.getX() + " " +  mouse.getY());
 		int absX = mouse.getX() + worldCam.getLeft();
 		int absY = mouse.getY() + worldCam.getTop();
-		System.out.println("Absolute Mouse Position: " + absX + " " +  absY);		
+		
+		//Debug Locations Printout
+		//System.out.println("Relative Mouse Position: " + mouse.getX() + " " +  mouse.getY());
+		//System.out.println("Absolute Mouse Position: " + absX + " " +  absY);	
+		
+		if(mouse.getX() < sidebar.getSidebarX())
+		{
+			if(shiftPressed)
+			{
+				player.checkMouseHover(absX, absY);
+			}
+			
+			else
+			{
+				if(player.hasActive())
+				{
+					player.moveEntityTo(absX, absY);
+				}
+				
+				else
+				{
+					player.checkMouseHover(absX, absY);
+				}
+			}		
+
+		}
 	}
 	
+	public void handleRightClick()
+	{
+		player.removeSelected();
+	}
+	
+	public void adjustCamera(String direction, Graphics2D g)
+	{
+		if(!mouseOnZone)
+		{		
+			if(direction == "up")
+			{
+				worldCam.upShift();
+			}
+			
+			else if(direction == "down")
+			{
+				worldCam.downShift();
+			}
+			
+			else if(direction == "left")
+			{
+				worldCam.leftShift();
+			}
+			
+			else if(direction == "right")
+			{
+				worldCam.rightShift();
+			}
+			
+			else
+			{
+				System.out.println("Unexpected Output, camera idle.");
+			}
+			
+			keyboardUpdate(g);
+		}
+	}
+	
+	//update that is called regularly for the standard game loop
 	public void update(Graphics2D g, Point tracker)
 	{
 		checkShift(tracker);
 		
 		checkTilesDraw(g);
 		
+		player.update(g, worldCam.getCamera());
+		
 		sidebar.update(g);
+	}
+	
+	//update called when keyboard input is detected...this is to prevent image tearing
+	public void keyboardUpdate(Graphics2D g)
+	{
+		checkTilesDraw(g);
+		
+		player.update(g, worldCam.getCamera());
+		
+		sidebar.update(g);
+	}
+	
+	public ArrayList<ArrayList<Tile>> getWorld()
+	{
+		return tileSet;
 	}
 }

@@ -12,7 +12,7 @@ public class Entity
 {
 	//Members that will be set before initialization for all instances
 	private Sprite sprite;
-	private Game_Wrapper origin;
+	protected TileWorld origin;
 	private double xPos = 300;
 	private double yPos = 400;
 	private double xVelo = 0;
@@ -22,18 +22,17 @@ public class Entity
 	private boolean active = true;
 	private int health = 10;
 	private double moveAngle = 0;
-	private int owner;
 	private int action = 1;
 	
 	//Bound behavior action
 	public int LOOP = 1;
-	public int RESET = 2;
+	public int DENY = 2;
 	
 	//collision - Bounding Box
 	private Rectangle self = new Rectangle();
 	private Rectangle other = new Rectangle();
 	
-	public Entity(Game_Wrapper source, String imageFile, int width, int height)
+	public Entity(TileWorld source, String imageFile, int width, int height)
 	{
 		origin = source;
 		try
@@ -48,13 +47,23 @@ public class Entity
 			
 		}
 		
-		owner = 1;
 	}
 	
 	public void changeSpeed(double newSpeed)
 	{
 		speed = speed + newSpeed;
 		calculateMovementVector();
+	}
+	
+	//set Speed without causing it to move
+	public void setSpeed(double newSpeed)
+	{
+		speed = newSpeed;
+	}
+	
+	public double getSpeed()
+	{
+		return speed;
 	}
 	
 	public void adjustSpeed()
@@ -77,22 +86,12 @@ public class Entity
 		health = newHealth;
 	}
 	
-	public int getOwner()
-	{
-		return owner;
-	}
-	
-	public void setOwner(int newOwner)
-	{
-		owner = newOwner;
-	}
-	
 	public Sprite getSprite()
 	{
 		return sprite;
 	}
 	
-	public Game_Wrapper getSource()
+	public TileWorld getSource()
 	{
 		return origin;
 	}
@@ -133,6 +132,16 @@ public class Entity
 		yVelo = newVelocity;
 	}
 	
+	public double getXVelocity()
+	{
+		return xVelo;
+	}
+	
+	public double getYVelocity()
+	{
+		return yVelo;
+	}
+	
 	public void setImgAngle(double degrees)
 	{
 		imgAngle = degrees * (Math.PI/180);
@@ -161,6 +170,12 @@ public class Entity
 	public double getMoveAngle()
 	{
 		return (moveAngle / (Math.PI/180));
+	}
+	
+	public Rectangle getBoundingBox()
+	{
+		self.setBounds((int)xPos, (int)yPos, sprite.getWidth(), sprite.getHeight());
+		return self;
 	}
 	
 	public void changeMoveAngleBy(double degrees)
@@ -201,24 +216,40 @@ public class Entity
 		
 		adjustSpeed();
 	}
-		
-	public void draw(Graphics2D g)
+	
+	//virtual function to override
+	public void moveTo(int mouseX, int mouseY) 
 	{
-		if(g != null)
+		
+	}
+	
+	public void stopMove()
+	{
+		xVelo = 0;
+		yVelo = 0;
+	}
+	
+	public void checkDraw(Graphics2D g, Rectangle camera)
+	{
+		self.setBounds((int) xPos, (int) yPos, sprite.getWidth(), sprite.getHeight());
+		
+		//our Sprite is somewhat (if not entirely) on screen, we need to draw them on.
+		if(self.intersects(camera))
 		{
+			//get offsets
+			int offsetX = (int)xPos - camera.x;
+			int offsetY = (int)yPos - camera.y;	
+			
 			AffineTransform adjust = new AffineTransform();
 
-			adjust.rotate(imgAngle, xPos + sprite.getWidth()/2, yPos + sprite.getHeight()/2);
+			adjust.rotate(imgAngle, offsetX + sprite.getWidth()/2, offsetY + sprite.getHeight()/2);
 			g.setTransform(adjust);
 			
-			sprite.draw(g, (int)xPos, (int)yPos);
-			adjust.rotate(-imgAngle,xPos + sprite.getWidth()/2, yPos + sprite.getHeight()/2);
+			sprite.draw(g, offsetX, offsetY);
+			adjust.rotate(-imgAngle, offsetX + sprite.getWidth()/2, offsetY + sprite.getHeight()/2);
 			g.setTransform(adjust);
-		}
-		
-		else
-		{
-			System.out.println("Missing Graphics");
+			
+			
 		}
 	}
 	
@@ -227,14 +258,14 @@ public class Entity
 		active = false;
 	}
 	
-	public void update(Graphics2D g)
+	public void update(Graphics2D g, Rectangle camera)
 	{
 		if(active)
 		{
 			xPos = xPos + xVelo;
 			yPos = yPos + yVelo;
 			checkBounds();			
-			draw(g);
+			checkDraw(g, camera);
 		}
 	}
 	
@@ -242,30 +273,48 @@ public class Entity
 	{
 		if(action == LOOP)
 		{
-			if (xPos > (origin.canvas.getWidth() - (origin.windowXRightOffset + sprite.getWidth())))
+			if (xPos > origin.getWorldWidth())
 			{
-				xPos = (0 + origin.windowXLeftOffset);
+				xPos = 0;
 			}
 			
-			else if(xPos < (0 + origin.windowXLeftOffset))
+			else if(xPos < 0)
 			{
-				xPos = (origin.canvas.getWidth() - (origin.windowXRightOffset + sprite.getWidth()));
+				xPos = origin.getWorldWidth();
 			}
 			
-			if(yPos > (origin.canvas.getHeight() - (origin.windowYTopOffset + sprite.getHeight())))
+			if(yPos > origin.getWorldHeight())
 			{
-				yPos = (0 + origin.windowYBottomOffset);
+				yPos = 0;
 			}
 			
-			else if(yPos < (0 + origin.windowYBottomOffset))
+			else if(yPos < 0)
 			{
-				yPos = (origin.canvas.getHeight() - (origin.windowYTopOffset + sprite.getHeight()));
+				yPos = origin.getWorldHeight();
 			}
 		}
 		
-		if(action == RESET)
+		if(action == DENY)
 		{
+			if (xPos > origin.getWorldWidth())
+			{
+				xPos =  origin.getWorldWidth();
+			}
 			
+			else if(xPos < 0)
+			{
+				xPos = 0;
+			}
+			
+			if(yPos > origin.getWorldHeight())
+			{
+				yPos = origin.getWorldHeight();
+			}
+			
+			else if(yPos < 0)
+			{
+				yPos = 0;
+			}
 		}
 		
 	}

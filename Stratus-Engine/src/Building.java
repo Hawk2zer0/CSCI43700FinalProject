@@ -12,7 +12,7 @@ public class Building extends Entity
 	
 	private Rectangle buildRange = new Rectangle();
 	
-	public Building(Game_Wrapper source, String imageFile, int width, int height,int offset)
+	public Building(TileWorld source, String imageFile, int width, int height,int offset)
 	{
 		super(source, imageFile, width, height);
 		buildRangeOffset = offset;

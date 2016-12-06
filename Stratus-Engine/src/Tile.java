@@ -28,14 +28,12 @@ public class Tile
 			
 			if(Integer.parseInt(terrainId) != -1)
 			{			
-				//System.out.println("Impassible Tile placed at:  (" + posX + "," + posY + ")");
 				terrain = TileSpriteDatabase.instance().getImageSprite(terrainId);
 				wall = true;
 			}
 			
 			if(Integer.parseInt(decorId) != -1)
 			{
-				//System.out.println("Adding Decor Tile of " + decorId);
 				decor = DecorSpriteDatabase.instance().getImageSprite(decorId);
 				
 				if(Integer.parseInt(decorId) >= 25)
@@ -64,6 +62,21 @@ public class Tile
 	public int getWidth()
 	{
 		return base.getWidth();
+	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
+	public boolean isBlocked()
+	{
+		return wall;
 	}
 	
 	public void addDecor(String decorItem)
@@ -98,6 +111,13 @@ public class Tile
 			}
 		}
 		
+	}
+	
+	public Rectangle getArea()
+	{
+		self = new Rectangle(x, y, base.getWidth(), base.getHeight());
+		
+		return self;
 	}
 	
 
