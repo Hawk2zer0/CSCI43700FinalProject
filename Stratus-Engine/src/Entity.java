@@ -13,8 +13,8 @@ public class Entity
 	//Members that will be set before initialization for all instances
 	private Sprite sprite;
 	protected TileWorld origin;
-	private double xPos = 300;
-	private double yPos = 400;
+	private double xPos = -5;
+	private double yPos = -5;
 	private double xVelo = 0;
 	private double yVelo = 0;
 	private double imgAngle = 0;
@@ -44,7 +44,7 @@ public class Entity
 		
 		catch (Exception e)
 		{
-			
+			System.out.println(e);
 		}
 		
 	}

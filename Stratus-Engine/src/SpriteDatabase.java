@@ -27,6 +27,16 @@ public class SpriteDatabase
 	protected SpriteDatabase()
 	{
 		loadImageSprite("test.png", 40,40);
+		loadImageSprite("truck3_body.png", 20,40);
+		loadImageSprite("hq.png", 80,80);
+		loadImageSprite("ruin1.png", 24,40);
+		loadImageSprite("barracks.png", 100,100);
+		loadImageSprite("barracksComplete.png", 100,100);
+		loadImageSprite("powerplant.png", 100, 100);
+		loadImageSprite("powerplantIcon.png", 100,100);
+		loadImageSprite("powerplantComplete.png", 100,100);
+		loadImageSprite("warFactory.png", 100, 100);
+		loadImageSprite("warFactoryComplete.png", 100, 100);
 	}
 	
 	public static SpriteDatabase instance()

@@ -28,6 +28,7 @@ public class Team
 	
 	//array for units selected	
 	private ArrayList<Unit> activeUnits = new ArrayList<Unit>();
+	private Building activeBuilding;
 	
 	public Team(TileWorld source, int teamId, int moneyAmount)
 	{
@@ -38,6 +39,8 @@ public class Team
 		System.out.println("Player " +id+ " Ready!");
 		
 		addUnits();
+		buildConYard(40, 40);
+		buildRuin();
 	}
 	
 	public boolean getHasConYard()
@@ -55,33 +58,97 @@ public class Team
 		return money;
 	}
 	
+	public void setMoney(int newAmount)
+	{
+		money = newAmount;
+	}
+	
+	public boolean canPlaceBuilding()
+	{
+		return placeBuilding;
+	}
+	
+	public Building getActiveBuilding()
+	{
+		return activeBuilding;
+	}
+	
+	public ArrayList<Building> getBuildings()
+	{
+		return buildings;
+	}
+	
 	public void buildConYard(int x, int y)
 	{
-		Building conYard = new Building(origin, "hq.png", 150, 150, 40);
+		Building conYard = new Building(origin, "hq.png", 80, 80, 40);
 		
 		conYard.changePosition(x, y);
 		
-		//conYard.setOwner(id);
+		conYard.setOwner(id);
 		
 		conYard.setHealth(500);
+		
+		conYard.updateTiles();
 		
 		buildings.add(conYard);
 		
 		setHasConYard(true);	
 	}
 	
+	public void buildRuin()
+	{
+		Building ruin = new Building(origin, "ruin1.png", 24,40,0);
+		
+		ruin.changePosition(640, 520);
+		
+		ruin.setHealth(20);
+		
+		ruin.updateTiles();
+		
+		buildings.add(ruin);
+	}
+	
+	public void buildBuilding(int id)
+	{
+		if(id == 1)
+		{
+			activeBuilding  = new Building(origin, "powerplant.png", 80, 80,10);
+		}
+		
+		else if(id == 2)
+		{
+			activeBuilding  = new Building(origin, "barracks.png", 80, 80,20);
+		}
+		
+		else if(id == 3)
+		{
+			activeBuilding  = new Building(origin, "warFactory.png", 80, 80, 20);
+		}
+		
+		if(activeBuilding != null)
+		{
+			System.out.println("Something is wrong");
+		}
+		
+		else
+		{
+			System.out.println("No Assignement");
+		}
+		
+		placeBuilding = true;
+	}
+	
+	public void placeStructure(int x, int y)
+	{
+		activeBuilding.changePosition(x, y);
+		buildings.add(activeBuilding);
+		activeBuilding = null;
+	}
+	
 	//debug method for now
 	public void addUnits()
-	{
-		Unit test = new Unit(origin,"test.png", 40, 40, 1);
-		
-		test.setSpeed(1);
-		
-		test.changePosition(120, 880);
-		
-		units.add(test);
-		
-		Unit test2 = new Unit(origin,"test.png", 40, 40, 1);
+	{		
+		Unit test2 = new Unit(origin,"truck3_body.png", 40, 40, 1);
 		
 		test2.setSpeed(1);
 		
@@ -95,6 +162,11 @@ public class Team
 		for(Entity unit : units)
 		{
 			unit.update(graphics, camera);
+		}
+		
+		for(Entity building : buildings)
+		{
+			building.update(graphics, camera);
 		}
 	
 	}

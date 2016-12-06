@@ -135,48 +135,49 @@ public class Unit extends Entity
 			}
 		}
 		
-		if(!endTile.isBlocked())
+		if(startTile != endTile)
 		{
-			
-			//check their locations and determine priority
-			if(startTile.getX() - endTile.getX() >= 0)
+			if(!endTile.isBlocked())
 			{
-				leftFirst = true;
-			}
-			
-			if(startTile.getY() - endTile.getY() >= 0)
-			{
-				upFirst = true;
-			}
-			
-			A_Star(startTile, startRow, startCol);
-			
-			if(distanceTo.get(nodes.indexOf(endTile)) == 9999)
-			{
-				System.out.println("There's no way for me to reach there");
+				
+				//check their locations and determine priority
+				if(startTile.getX() - endTile.getX() >= 0)
+				{
+					leftFirst = true;
+				}
+				
+				if(startTile.getY() - endTile.getY() >= 0)
+				{
+					upFirst = true;
+				}
+				
+				A_Star(startTile, startRow, startCol);
+				
+				if(distanceTo.get(nodes.indexOf(endTile)) == 9999)
+				{
+					System.out.println("There's no way for me to reach there");
+				}
+				
+				else
+				{
+					//build path
+					buildPath(endTile);
+					
+					if(state != MOVING)
+					{
+						nextPoint = path.pop();
+						moveOut();
+					}				
+
+				}
+				
 			}
 			
 			else
 			{
-				//build path
-				buildPath(endTile);
-				
-				if(state != MOVING)
-				{
-					nextPoint = path.pop();
-					moveOut();
-				}				
-
+				System.out.println("I can't go there...");
 			}
-			
-		}
-		
-		else
-		{
-			System.out.println("I can't go there...");
-		}
-		
-		
+		}		
 	}
 	
 	public void A_Star(Tile currentNode, int row, int column)
@@ -523,15 +524,15 @@ public class Unit extends Entity
 			
 			System.out.println("nextPoint changed");
 			
-			//System.out.println("Current Point to Go: " + currentPoint.x + "," + currentPoint.y);
-			//System.out.println("Sprite Location: " + ((int)getXPosition() + (getSprite().getWidth()/2)) + "," + ((int)getYPosition() + (getSprite().getHeight()/2)));
+			System.out.println("Current Point to Go: " + currentPoint.x + "," + currentPoint.y);
+			System.out.println("Sprite Location: " + ((int)getXPosition() + (getSprite().getWidth()/2)) + "," + ((int)getYPosition() + (getSprite().getHeight()/2)));
 			
 			//calculate angle
 			int diffX = currentPoint.x - ((int)getXPosition() + (getSprite().getWidth()/2));
 			int diffY = currentPoint.y - ((int)getYPosition() + (getSprite().getHeight()/2));
 			double angle = 0;
 			
-			//System.out.println("ArcTan of : " + diffY + "/" + diffX );
+			System.out.println("ArcTan of : " + diffY + "/" + diffX );
 			
 			//special case handling
 			if(diffX == 0)
@@ -566,7 +567,7 @@ public class Unit extends Entity
 				angle = (Math.atan2((double)diffY , (double) diffX) * (180/Math.PI));
 			}
 			
-			//System.out.println("Angle After Adding: " + angle);
+			System.out.println("Angle After Adding: " + angle);
 			
 			this.setAngles(angle);		
 			

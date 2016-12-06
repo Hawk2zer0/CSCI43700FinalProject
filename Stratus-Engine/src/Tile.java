@@ -79,6 +79,16 @@ public class Tile
 		return wall;
 	}
 	
+	public void block()
+	{
+		wall = true;
+	}
+	
+	public void free()
+	{
+		wall = false;
+	}
+	
 	public void addDecor(String decorItem)
 	{
 		//add block here later

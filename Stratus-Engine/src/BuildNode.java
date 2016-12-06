@@ -16,12 +16,18 @@ public class BuildNode
 	private int cost = 0;
 	private String name = "";
 	
+	//timer variable
+	long timerStart;
+	long lastInterval;
+	
 	//Sprites
 	Sprite active;
 	Sprite normal;
 	Sprite completed;
 	
-	public BuildNode(String normalImage, String completedImage, int buildTime, int buildingNum, int cost, String newName)
+	Team player;
+	
+	public BuildNode(Team curPlayer, String normalImage, String completedImage, int buildTime, int buildingNum, int cost, String newName)
 	{
 		state = "Idle";
 		try
@@ -41,6 +47,36 @@ public class BuildNode
 		active = normal;
 		
 		name = newName;
+		
+		player = curPlayer;
+	}
+	
+	public void checkBuild()
+	{
+		if(state == "Building")
+		{
+			
+			if((System.currentTimeMillis() - timerStart) >= (buildTime * 1000))
+			{
+				active = completed;
+				state = "Ready";
+				System.out.println("Ready to go!");
+			}
+			
+			else if(System.currentTimeMillis() - lastInterval >= 1000)
+			{
+				lastInterval = System.currentTimeMillis();
+				player.setMoney(player.getMoney()-100);
+			}
+				
+		}		
+
+	}
+	
+	public void reset()
+	{
+		state = "Idle";
+		active = normal;
 	}
 	
 	
@@ -63,9 +99,9 @@ public class BuildNode
 	{
 		state = "Building";
 		
-		System.out.print("Building " + name  + "...");
-		System.out.print(active.getWidth());
-		System.out.print(active.getHeight());
+		System.out.println("Building " + name  + "...");
+		
+		timerStart = System.currentTimeMillis();
 		
 	}
 }

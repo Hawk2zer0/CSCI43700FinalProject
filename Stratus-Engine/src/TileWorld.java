@@ -1,5 +1,6 @@
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -52,10 +53,12 @@ public class TileWorld
 		determineMapSize();
 		setUpSideBarDimensions();
 		
-		worldCam = new Camera(cameraWidth,cameraHeight, worldWidth, worldHeight);
-		sidebar = new Sidebar(cameraWidth, 0, sidebarWidth, cameraHeight);
+		player = new Team(this,1,1000);
 		
-		player = new Team(this,1,0);
+		worldCam = new Camera(cameraWidth,cameraHeight, worldWidth, worldHeight);
+		sidebar = new Sidebar(cameraWidth, 0, sidebarWidth, cameraHeight, player);
+		
+		
 		
 	}
 	
@@ -298,6 +301,13 @@ public class TileWorld
 				player.checkMouseHover(absX, absY);
 			}
 			
+			else if(player.canPlaceBuilding())
+			{
+				System.out.println("Test Location");
+				
+				checkValidSpot(absX, absY);
+			}
+			
 			else
 			{
 				if(player.hasActive())
@@ -311,6 +321,65 @@ public class TileWorld
 				}
 			}		
 
+		}
+		
+		else
+		{
+			sidebar.checkClick(mouse);
+		}
+	}
+	
+	public void checkValidSpot(int x, int y)
+	{
+		boolean validTile = true;
+		boolean validBuilding = false;
+		
+		Rectangle buildingQuestion = new Rectangle(x, y, 80, 80);
+		
+		for(ArrayList<Tile> tileList : tileSet)
+		{
+			for(Tile node : tileList)
+			{
+				if(node.getArea().intersects(buildingQuestion))
+				{
+					if(node.isBlocked())
+					{
+						//not valid 
+						System.out.println("Terrain not suitable...");
+						validTile = false;
+					}
+				}
+			}
+		}
+		
+		//check all buildings
+		//testing buildings
+		for(Building b : player.getBuildings())
+		{
+			//within buildRadius?
+			if(b.getBuildRadius().intersects(buildingQuestion))
+			{
+				validBuilding = true;
+				
+				if(b.getBoundingBox().intersects(buildingQuestion))
+				{
+					//not valid
+					System.out.println("Too Close to another building");
+					
+					validBuilding = false;
+				}
+			}
+		}
+		
+		if(!validBuilding)
+		{
+			System.out.println("Buildings issue");
+		}
+		
+		if(validTile && validBuilding)
+		{
+			player.placeStructure(x,y);
+			sidebar.resetNode();
 		}
 	}
 	
