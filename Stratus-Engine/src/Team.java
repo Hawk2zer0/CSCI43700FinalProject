@@ -146,6 +146,7 @@ public class Team
 		activeBuilding.updateTiles();
 		buildings.add(activeBuilding);
 		activeBuilding = null;
+		placeBuilding = false;
 	}
 	
 	//debug method for now

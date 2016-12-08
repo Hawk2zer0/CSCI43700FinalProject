@@ -146,7 +146,7 @@ public class GameCanvas extends Canvas
 	
 	public void mainloop()
     {        
-        createBufferStrategy(4);
+        createBufferStrategy(2);
     	
     	while(running)
     	{
